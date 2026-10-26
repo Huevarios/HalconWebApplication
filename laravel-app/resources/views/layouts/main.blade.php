@@ -9,21 +9,30 @@
     <body>
         <nav>
             <a href="{{ route('home') }}">Home</a>
-            @auth<a href="{{ route('dashboard') }}">Dashboard</a>
-                <a href="{{ route('users.index') }}">Users</a>
+            @auth
+                <a href="{{ route('dashboard') }}">Dashboard</a>
+
+                @can('manage-users')
+                    <a href="{{ route('users.index') }}">Users</a>
+                @endcan
+
                 <a href="{{ route('orders.index') }}">Orders</a>
                 <a href="{{ route('orders.archived') }}">Archived</a>
+
                 <form method="POST" action="{{ route('logout') }}" style="display:inline">
                     @csrf
                     <button>Logout</button>
                 </form>
-            @else<a href="{{ route('login') }}">Login</a>
+            @else
+                <a href="{{ route('login') }}">Login</a>
             @endauth
         </nav>
         <hr>
+
         @if(session('success'))
             <p class="success">{{ session('success') }}</p>
         @endif
+
         @if($errors->any())
             <ul class="error">
                 @foreach($errors->all() as $error)
@@ -31,6 +40,7 @@
                 @endforeach
             </ul>
         @endif
+
         @yield('content')
     </body>
 </html>
